@@ -4,13 +4,26 @@ const patientSchema = new mongoose.Schema({
   tokenId: { type: String, required: true, unique: true },
   registeredPatientId: { 
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'RegisteredPatient', 
+    ref: 'User', 
     required: true 
+  },
+  unit: { 
+    type: String, 
+    enum: ['Normal', 'OPD-Normal', 'OPD-Urgent', 'Critical', 'Booked'], 
+    default: 'Normal' 
   },
   severity: { 
     type: String, 
-    enum: ['Urgent', 'Normal'], 
+    enum: ['Critical', 'Urgent', 'Normal'], 
     default: 'Normal' 
+  },
+  score: { 
+    type: Number, 
+    default: 0 
+  },
+  delayReason: { 
+    type: String, 
+    default: '' 
   },
   status: { 
     type: String, 

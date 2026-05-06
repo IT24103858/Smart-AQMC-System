@@ -8,7 +8,14 @@
  * @returns {Number} - The calculated priority score
  */
 const calculatePriorityScore = (patient) => {
-  const basePoints = patient.severity === 'Urgent' ? 30 : 10;
+  if (patient.unit === 'Critical') return 0; // FCFS logic
+
+  let basePoints = 0;
+  if (patient.unit === 'OPD-Urgent') basePoints = 30;
+  else if (patient.unit === 'Booked') basePoints = 20;
+  else if (patient.unit === 'OPD-Normal') basePoints = 10;
+  else if (patient.unit === 'Normal') basePoints = 0;
+
   
   // Calculate minutes waited
   const now = new Date();

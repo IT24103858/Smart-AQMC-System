@@ -71,6 +71,7 @@ export default function Sidebar() {
             <NavLink to="/admin/staff-calendar" icon="calendar_month" isActive={isPathActive('/admin/staff-calendar')}>Staff Calendar</NavLink>
             <NavLink to="/admin/weekly-schedule" icon="assignment" isActive={isPathActive('/admin/weekly-schedule')}>Hospital Timetable</NavLink>
             <NavLink to="/admin/queue" icon="queue" isActive={isPathActive('/admin/queue')}>Queue Management</NavLink>
+            <NavLink to="/admin/medical-records" icon="clinical_notes" isActive={isPathActive('/admin/medical-records')}>Medical Records</NavLink>
 
           </>
         )}

@@ -21,6 +21,7 @@ import DoctorAvailabilityPage from './pages/DoctorAvailabilityPage';
 import DoctorProfilePage from './pages/DoctorProfilePage';
 import DoctorSessionsPage from './pages/DoctorSessionsPage';
 import DoctorSessionDetailPage from './pages/DoctorSessionDetailPage';
+import AdminMedicalRecordsPage from './pages/AdminMedicalRecordsPage';
 
 
 import StaffDashboardPage from './pages/StaffDashboardPage';
@@ -54,6 +55,7 @@ export default function App() {
         <Route path="/admin/weekly-schedule" element={<AdminWeeklySchedulePage />} />
         <Route path="/admin/queue" element={<AdminQueuePage />} />
         <Route path="/admin/appointments" element={<AdminAppointmentsPage />} />
+        <Route path="/admin/medical-records" element={<AdminMedicalRecordsPage />} />
         <Route path="/doctor" element={<DoctorDashboardPage />} />
         <Route path="/doctor/availability" element={<DoctorAvailabilityPage />} />
         <Route path="/doctor/profile" element={<DoctorProfilePage />} />
