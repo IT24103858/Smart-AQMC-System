@@ -42,6 +42,7 @@ export default function AdminStaffCalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date()); // Start at today's month
   const [isMeetingModalOpen, setIsMeetingModalOpen] = useState(false);
   const [meetings, setMeetings] = useState<any[]>([]);
+  const [selectedMeeting, setSelectedMeeting] = useState<any>(null);
 
   React.useEffect(() => {
     fetchMeetings();
@@ -54,6 +55,26 @@ export default function AdminStaffCalendarPage() {
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const handleDeleteMeeting = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!window.confirm('Are you sure you want to delete this meeting?')) return;
+
+    try {
+      const res = await fetch(`/api/meetings/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        fetchMeetings();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleEditMeeting = (meeting: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedMeeting(meeting);
+    setIsMeetingModalOpen(true);
   };
 
   const year = currentDate.getFullYear();
@@ -184,12 +205,28 @@ export default function AdminStaffCalendarPage() {
                           <div key={mi} className="bg-sky-50 border-l-4 border-sky-600 px-3 py-2.5 rounded-r transition-all hover:bg-sky-100/50 group/card shadow-sm border border-sky-100">
                             <div className="flex items-center justify-between mb-1.5">
                               <span className="text-xs font-black text-sky-900 leading-tight truncate uppercase tracking-tight">{m.title}</span>
-                              <span className="text-[10px] font-black text-sky-500 uppercase leading-none">{m.startTime}</span>
+                              <div className="flex items-center gap-1">
+                                <button
+                                  onClick={(e) => handleEditMeeting(m, e)}
+                                  className="size-5 flex items-center justify-center rounded-md hover:bg-sky-200 text-sky-600 transition-all"
+                                >
+                                  <span className="material-symbols-outlined text-[14px]">edit</span>
+                                </button>
+                                <button
+                                  onClick={(e) => handleDeleteMeeting(m.id, e)}
+                                  className="size-5 flex items-center justify-center rounded-md hover:bg-rose-100 text-rose-500 transition-all"
+                                >
+                                  <span className="material-symbols-outlined text-[14px]">delete</span>
+                                </button>
+                              </div>
                             </div>
 
-                            <div className="flex items-center gap-1.5 opacity-80">
-                              <span className="material-symbols-outlined text-[14px] text-sky-600">location_on</span>
-                              <span className="text-[9px] font-bold text-sky-700 truncate uppercase tracking-wider">{m.location}</span>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-[10px] font-black text-sky-500 uppercase leading-none">{m.startTime}</span>
+                              <div className="flex items-center gap-1.5 opacity-80">
+                                <span className="material-symbols-outlined text-[14px] text-sky-600">location_on</span>
+                                <span className="text-[9px] font-bold text-sky-700 truncate uppercase tracking-wider">{m.location}</span>
+                              </div>
                             </div>
 
                             <div className="flex flex-wrap gap-1 mt-2">
@@ -253,7 +290,11 @@ export default function AdminStaffCalendarPage() {
 
         <CreateMeetingModal
           isOpen={isMeetingModalOpen}
-          onClose={() => setIsMeetingModalOpen(false)}
+          onClose={() => {
+            setIsMeetingModalOpen(false);
+            setSelectedMeeting(null);
+          }}
+          initialData={selectedMeeting}
           onSuccess={fetchMeetings}
         />
       </main>

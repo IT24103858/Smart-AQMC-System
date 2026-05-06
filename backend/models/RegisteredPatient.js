@@ -8,6 +8,7 @@ const registeredPatientSchema = new mongoose.Schema({
   phone: { type: String },
   age: { type: Number },
   gender: { type: String },
+  bloodGroup: { type: String },
   address: { type: String },
   medicalHistory: { type: String }
 }, { timestamps: true });

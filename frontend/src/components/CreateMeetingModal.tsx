@@ -5,9 +5,10 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  initialData?: any;
 }
 
-export default function CreateMeetingModal({ isOpen, onClose, onSuccess }: Props) {
+export default function CreateMeetingModal({ isOpen, onClose, onSuccess, initialData }: Props) {
   const { showNotification } = useNotification();
   const [formData, setFormData] = useState({
     title: '',
@@ -21,6 +22,30 @@ export default function CreateMeetingModal({ isOpen, onClose, onSuccess }: Props
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState(false);
+
+  React.useEffect(() => {
+    if (initialData) {
+      setFormData({
+        title: initialData.title || '',
+        date: initialData.date ? new Date(initialData.date).toLocaleDateString('en-CA') : new Date().toLocaleDateString('en-CA'),
+        startTime: initialData.startTime || '08:00',
+        endTime: initialData.endTime || '09:00',
+        participants: initialData.participants || ['ALL_STAFF'],
+        location: initialData.location || 'Main Conference Hall',
+        notes: initialData.notes || ''
+      });
+    } else {
+      setFormData({
+        title: '',
+        date: new Date().toLocaleDateString('en-CA'),
+        startTime: '08:00',
+        endTime: '09:00',
+        participants: ['ALL_STAFF'],
+        location: 'Main Conference Hall',
+        notes: ''
+      });
+    }
+  }, [initialData, isOpen]);
 
   React.useEffect(() => {
     validate();
@@ -48,27 +73,32 @@ export default function CreateMeetingModal({ isOpen, onClose, onSuccess }: Props
 
     setIsLoading(true);
     try {
-      const response = await fetch('/api/meetings', {
-        method: 'POST',
+      const url = initialData ? `/api/meetings/${initialData.id}` : '/api/meetings';
+      const method = initialData ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
       if (response.ok) {
-        showNotification('Meeting scheduled successfully!');
+        showNotification(initialData ? 'Meeting updated successfully!' : 'Meeting scheduled successfully!');
         onSuccess();
         onClose();
-        setFormData({
-          title: '',
-          date: new Date().toLocaleDateString('en-CA'),
-          startTime: '08:00',
-          endTime: '09:00',
-          participants: ['ALL_STAFF'],
-          location: 'Main Conference Hall',
-          notes: ''
-        });
+        if (!initialData) {
+          setFormData({
+            title: '',
+            date: new Date().toLocaleDateString('en-CA'),
+            startTime: '08:00',
+            endTime: '09:00',
+            participants: ['ALL_STAFF'],
+            location: 'Main Conference Hall',
+            notes: ''
+          });
+        }
       }
     } catch (error) {
-      console.error('Failed to create meeting:', error);
+      console.error('Failed to save meeting:', error);
     } finally {
       setIsLoading(false);
     }

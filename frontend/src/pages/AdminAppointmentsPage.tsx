@@ -13,6 +13,7 @@ interface AppointmentDetail {
   patientNic: string;
   patientPhone: string;
   illness: string;
+  status: string;
 }
 
 interface Stats {

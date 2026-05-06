@@ -184,6 +184,38 @@ export default function PatientDashboardPage() {
                                     </button>
                                 </div>
                             </div>
+
+                            {/* Live Queue Tracker */}
+                            <div className="relative group overflow-hidden bg-white rounded-[32px] p-8 border border-slate-200 shadow-xl shadow-slate-200/50 lg:col-span-2">
+                                <div className="absolute -right-10 -bottom-10 size-48 bg-sky-50 rounded-full blur-3xl group-hover:bg-sky-100 transition-all duration-700"></div>
+                                <div className="relative z-10 flex items-center justify-between">
+                                    <div className="flex flex-col gap-6">
+                                        <div className="flex items-center gap-4">
+                                            <div className="px-4 py-1.5 bg-sky-50 text-sky-600 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">Queue Status</div>
+                                            <div className="flex items-center gap-1.5">
+                                                <div className="size-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                                                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Live Now</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div>
+                                            <h3 className="text-2xl font-black text-slate-900">Track Your Position in Real-Time</h3>
+                                            <p className="text-slate-500 font-medium mt-1">Check how many people are ahead of you and get notified when it's your turn.</p>
+                                        </div>
+
+                                        <button 
+                                            onClick={() => navigate('/patient/live-queue')}
+                                            className="w-fit px-8 py-3 bg-sky-500 text-white rounded-2xl font-black text-sm hover:bg-sky-600 transition-all shadow-xl shadow-sky-200 flex items-center gap-2"
+                                        >
+                                            <span className="material-symbols-outlined text-lg">pedometer</span>
+                                            Open Live Tracker
+                                        </button>
+                                    </div>
+                                    <div className="hidden md:flex size-32 rounded-[2.5rem] bg-sky-50 items-center justify-center text-sky-500">
+                                        <span className="material-symbols-outlined text-6xl animate-bounce">hourglass_top</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>                        {/* Information Grid Replace Full Lists with Quick Navigation */}
                         <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-1000">
                             <div className="flex items-center justify-between">

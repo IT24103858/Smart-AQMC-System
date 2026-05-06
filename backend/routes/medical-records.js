@@ -48,26 +48,40 @@ router.get('/doctor/:doctorId', async (req, res) => {
     }
   });
 
-// POST new medical record (with optional file upload)
-router.post('/', upload.single('file'), async (req, res) => {
+// GET all medical records (Admin view)
+router.get('/', async (req, res) => {
     try {
-      const { patient, title, description, recordType, doctor, session } = req.body;
-      
-      const newRecord = new MedicalRecord({
-        patient,
-        title,
-        description,
-        recordType: recordType || 'PAST_REPORT',
-        doctor: doctor || undefined,
-        session: session || undefined,
-        filePath: req.file ? req.file.path : undefined,
-        date: new Date()
-      });
-  
-      await newRecord.save();
-      res.status(201).json(newRecord);
+      const list = await MedicalRecord.find({
+        recordType: { $in: ['PAST_REPORT', 'PRESCRIPTION'] }
+      })
+        .populate('patient', 'name nic email')
+        .populate({
+          path: 'doctor',
+          populate: { path: 'user', select: 'name' }
+        })
+        .populate('session')
+        .populate('prescription')
+        .sort({ date: -1 });
+      res.json(list);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+// DELETE medical record
+router.delete('/:id', async (req, res) => {
+    try {
+      const record = await MedicalRecord.findByIdAndDelete(req.params.id);
+      if (!record) return res.status(404).json({ error: 'Record not found' });
+      
+      // Also delete the file if it exists
+      if (record.filePath && fs.existsSync(record.filePath)) {
+          fs.unlinkSync(record.filePath);
+      }
+      
+      res.json({ message: 'Record deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   });
 

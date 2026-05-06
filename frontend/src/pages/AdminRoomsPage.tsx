@@ -49,6 +49,22 @@ export default function AdminRoomsPage() {
         setRefreshTrigger(prev => prev + 1);
     };
 
+    const isPastSession = (day: string, block: string) => {
+        if (!day || !block) return false;
+        const DAYS_ORDER = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        const currentDayIndex = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1;
+        const dayIndex = DAYS_ORDER.indexOf(day);
+
+        if (dayIndex < currentDayIndex) return true;
+        if (dayIndex === currentDayIndex) {
+            const timeParts = block.split(' - ');
+            if (timeParts.length < 2) return false;
+            const endHour = parseInt(timeParts[1].split(':')[0]);
+            if (new Date().getHours() >= endHour) return true;
+        }
+        return false;
+    };
+
     const filteredRooms = rooms.filter(room => {
         // First filter by specialization
         if (filterSpecialization !== 'All' && room.specialization !== filterSpecialization) return false;
@@ -148,7 +164,8 @@ export default function AdminRoomsPage() {
                                             .filter(s => {
                                                 const matchesDay = s.dayOfWeek?.toLowerCase() === selectedDay.toLowerCase();
                                                 const matchesSpec = filterSpecialization === 'All' || s.room?.specialization === filterSpecialization;
-                                                return matchesDay && matchesSpec;
+                                                const isDoctorActive = s.doctor?.user?.status !== 'deactivated';
+                                                return matchesDay && matchesSpec && isDoctorActive;
                                             })
                                             .sort((a, b) => a.timeBlock.localeCompare(b.timeBlock))
 
@@ -221,13 +238,17 @@ export default function AdminRoomsPage() {
                                                         {/* Actions Column */}
                                                         <td className="px-8 py-6 whitespace-nowrap text-right">
                                                             <div className="flex justify-end">
-                                                                <button
-                                                                    onClick={() => handleOpenAssignModal(room)}
-                                                                    className="size-11 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 flex items-center justify-center hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-all active:scale-95 shadow-sm"
-                                                                    title="Assign Nursing Staff"
-                                                                >
-                                                                    <span className="material-symbols-outlined text-[20px]">person_add</span>
-                                                                </button>
+                                                                {!isPastSession(session.dayOfWeek, session.timeBlock) ? (
+                                                                    <button
+                                                                        onClick={() => handleOpenAssignModal(room)}
+                                                                        className="size-11 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 flex items-center justify-center hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-all active:scale-95 shadow-sm"
+                                                                        title="Assign Nursing Staff"
+                                                                    >
+                                                                        <span className="material-symbols-outlined text-[20px]">person_add</span>
+                                                                    </button>
+                                                                ) : (
+                                                                    <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest bg-slate-50 px-3 py-2 rounded-lg">Archived</span>
+                                                                )}
                                                             </div>
                                                         </td>
 

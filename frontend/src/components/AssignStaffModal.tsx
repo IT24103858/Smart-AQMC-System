@@ -52,11 +52,11 @@ export default function AssignStaffModal({ isOpen, onClose, onAssign, room, allR
     if (!isOpen || !room) return null;
 
     const nursesList = allUsers
-        .filter(u => u.role === 'NURSE' && u.name.toLowerCase().includes(searchTermNurse.toLowerCase()))
+        .filter(u => u.role === 'NURSE' && u.status !== 'deactivated' && u.name.toLowerCase().includes(searchTermNurse.toLowerCase()))
         .filter(u => !selectedNurses.includes(u.id));
 
     const attendantsList = allUsers
-        .filter(u => u.role === 'ATTENDANT' && u.name.toLowerCase().includes(searchTermAttendant.toLowerCase()))
+        .filter(u => u.role === 'ATTENDANT' && u.status !== 'deactivated' && u.name.toLowerCase().includes(searchTermAttendant.toLowerCase()))
         .filter(u => !selectedAttendants.includes(u.id));
 
     const checkLocalConflict = (staffId: string) => {

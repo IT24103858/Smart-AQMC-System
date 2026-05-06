@@ -179,41 +179,41 @@ export default function AdminSchedulingPage() {
             <Sidebar />
             <main className="flex-1 flex flex-col h-full overflow-hidden bg-background-light relative custom-scrollbar">
                 <Header title="Weekly Scheduling" />
-                <div className="flex-1 overflow-y-auto p-6">
-                    <div className="max-w-full mx-auto flex flex-col gap-6">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                            <div className="flex flex-col gap-1.5">
-                                <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-none uppercase">Weekly Timetable</h3>
+                <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+                    <div className="w-full mx-auto flex flex-col gap-8">
+                        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                            <div className="flex flex-col gap-2">
+                                <h3 className="text-3xl font-black text-slate-900 tracking-tight leading-none uppercase">Weekly Timetable</h3>
                                 <div className="flex items-center gap-3">
-                                    <span className="text-[11px] font-black text-slate-400 tracking-[0.2em] uppercase">Current Schedule</span>
-                                    <div className="size-1 rounded-full bg-slate-300" />
-                                    <span className="text-[11px] font-black text-primary tracking-[0.2em] uppercase">{schedule.length} ACTIVE SESSIONS</span>
+                                    <span className="text-[12px] font-black text-slate-400 tracking-[0.2em] uppercase">Current Schedule</span>
+                                    <div className="size-1.5 rounded-full bg-slate-300" />
+                                    <span className="text-[12px] font-black text-primary tracking-[0.2em] uppercase">{schedule.length} ACTIVE SESSIONS</span>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-3">
+                            <div className="flex flex-wrap items-center gap-4">
                                 <button
                                     onClick={handleClear}
-                                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-[13px] transition-all bg-white text-rose-500 border border-rose-100 hover:bg-rose-50 hover:border-rose-200 active:scale-95 shadow-sm"
+                                    className="flex items-center gap-2.5 px-6 py-3.5 rounded-2xl font-black text-[12px] uppercase tracking-widest transition-all bg-white text-rose-500 border border-rose-100 hover:bg-rose-50 hover:border-rose-200 active:scale-95 shadow-sm"
                                 >
-                                    <span className="material-symbols-outlined text-[18px]">delete_sweep</span>
+                                    <span className="material-symbols-outlined text-[20px]">delete_sweep</span>
                                     Clear Timetable
                                 </button>
 
                                 <button
                                     onClick={() => setIsCreateModalOpen(true)}
-                                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-[13px] transition-all bg-white text-primary border border-primary/10 hover:bg-primary/5 hover:border-primary/20 active:scale-95 shadow-sm"
+                                    className="flex items-center gap-2.5 px-6 py-3.5 rounded-2xl font-black text-[12px] uppercase tracking-widest transition-all bg-white text-primary border border-primary/10 hover:bg-primary/5 hover:border-primary/20 active:scale-95 shadow-sm"
                                 >
-                                    <span className="material-symbols-outlined text-[18px]">add_circle</span>
+                                    <span className="material-symbols-outlined text-[20px]">add_circle</span>
                                     Create Session
                                 </button>
 
                                 <button
                                     onClick={handleGenerate}
                                     disabled={isGenerating}
-                                    className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[13px] transition-all shadow-lg ${isGenerating ? 'bg-slate-200 text-slate-400' : 'bg-primary text-white hover:bg-primary-dark shadow-primary/10 active:scale-95'}`}
+                                    className={`flex items-center gap-2.5 px-8 py-3.5 rounded-2xl font-black text-[12px] uppercase tracking-widest transition-all shadow-xl ${isGenerating ? 'bg-slate-200 text-slate-400' : 'bg-primary text-white hover:bg-primary-dark shadow-primary/20 active:scale-95'}`}
                                 >
-                                    <span className={`material-symbols-outlined text-[18px] ${isGenerating ? 'animate-spin' : ''}`}>
+                                    <span className={`material-symbols-outlined text-[20px] ${isGenerating ? 'animate-spin' : ''}`}>
                                         {isGenerating ? 'sync' : 'calendar_add_on'}
                                     </span>
                                     {isGenerating ? 'Generating...' : 'Generate Weekly Timetable'}
@@ -225,14 +225,14 @@ export default function AdminSchedulingPage() {
                         {/* Timetable Matrix */}
                         <div className="bg-white border border-slate-200/60 rounded-2xl shadow-sm overflow-hidden">
                             <div className="overflow-x-auto custom-scrollbar">
-                                <table className="w-full border-collapse table-fixed">
+                                <table className="w-full border-collapse table-fixed min-w-[1100px]">
                                     <thead>
                                         <tr>
-                                            <th className="sticky left-0 z-20 bg-slate-50 p-4 w-[140px] border-b border-r border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">
+                                            <th className="sticky left-0 z-20 bg-slate-50 p-4 w-[120px] border-b border-r border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">
                                                 Time
                                             </th>
                                             {DAYS.map((day, index) => (
-                                                <th key={day} className="p-4 min-w-[160px] bg-slate-50 border-b border-slate-100 text-center">
+                                                <th key={day} className="p-4 bg-slate-50 border-b border-slate-100 text-center">
                                                     <div className="flex flex-col gap-1">
                                                         <span className="text-[10px] font-black text-slate-900 uppercase tracking-[0.1em]">{day}</span>
                                                         <span className="text-[10px] font-black text-slate-600">{displayDates[index]}</span>
@@ -259,7 +259,9 @@ export default function AdminSchedulingPage() {
                                                     return (
                                                         <td key={`${day}-${block}`} className="p-2 border-b border-slate-100 align-top group-hover:bg-slate-50/30 transition-colors">
                                                             <div className="flex flex-col gap-1.5">
-                                                                {sessions.map((session: any) => {
+                                                                {sessions
+                                                                    .filter(s => s.doctor?.user?.status !== 'deactivated') // Deactivate filter
+                                                                    .map((session: any) => {
                                                                     const spec = session.doctor?.specialization || 'Default';
                                                                     const colors = SPECIALIZATION_COLORS[spec] || { bg: 'bg-slate-50', text: 'text-slate-600', border: 'border-slate-100', accent: 'bg-slate-400' };
 
@@ -276,15 +278,15 @@ export default function AdminSchedulingPage() {
                                                                                 <div className="flex items-center gap-1">
                                                                                     {!isPastSession(day, block) && (
                                                                                         <>
-                                                                                            <button
+                                                                                          <button
                                                                                                 onClick={() => handleEditSession(session, isoDates[dayIndex])}
-                                                                                                className="size-5 flex items-center justify-center rounded bg-white/50 text-slate-400 hover:text-primary hover:bg-white transition-all opacity-0 group-hover/card:opacity-100"
+                                                                                                className="size-6 flex items-center justify-center rounded bg-slate-100 text-slate-500 hover:text-primary hover:bg-white shadow-sm transition-all"
                                                                                             >
                                                                                                 <span className="material-symbols-outlined text-[14px]">edit</span>
                                                                                             </button>
                                                                                             <button
                                                                                                 onClick={() => handleDeleteSession(session.id)}
-                                                                                                className="size-5 flex items-center justify-center rounded bg-white/50 text-slate-400 hover:text-rose-500 hover:bg-white transition-all opacity-0 group-hover/card:opacity-100"
+                                                                                                className="size-6 flex items-center justify-center rounded bg-slate-100 text-slate-500 hover:text-rose-500 hover:bg-white shadow-sm transition-all"
                                                                                             >
                                                                                                 <span className="material-symbols-outlined text-[14px]">delete</span>
                                                                                             </button>

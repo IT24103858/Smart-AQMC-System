@@ -34,4 +34,15 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// UPDATE meeting
+router.put('/:id', async (req, res) => {
+  try {
+    const meeting = await Meeting.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!meeting) return res.status(404).json({ error: 'Meeting not found' });
+    res.json(meeting);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 module.exports = router;
